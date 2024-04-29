@@ -23,7 +23,7 @@ class KITTI(data.Dataset):
   def __init__(self, opt, split):
     super(KITTI, self).__init__()
     self.data_dir = os.path.join(opt.data_dir, 'kitti')
-    self.img_dir = os.path.join(self.data_dir, 'images', 'trainval')
+    self.img_dir = os.path.join(self.data_dir, 'training', 'image_2')
     if opt.trainval:
       split = 'trainval' if split == 'train' else 'test'
       self.img_dir = os.path.join(self.data_dir, 'images', split)
@@ -66,7 +66,8 @@ class KITTI(data.Dataset):
     pass
 
   def save_results(self, results, save_dir):
-    results_dir = os.path.join(save_dir, 'results')
+    results_dir = os.path.join(save_dir, 'results_aaaa')
+    print(f'results_dir: {results_dir} >>>>>>> \n\n\n')
     if not os.path.exists(results_dir):
       os.mkdir(results_dir)
     for img_id in results.keys():

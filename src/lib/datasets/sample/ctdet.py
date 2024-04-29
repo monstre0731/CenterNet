@@ -100,6 +100,8 @@ class CTDetDataset(data.Dataset):
       ann = anns[k]
       bbox = self._coco_box_to_bbox(ann['bbox'])
       cls_id = int(self.cat_ids[ann['category_id']])
+      if cls_id < 0:
+        continue
       if flipped:
         bbox[[0, 2]] = width - bbox[[2, 0]] - 1
       bbox[:2] = affine_transform(bbox[:2], trans_output)
@@ -119,6 +121,9 @@ class CTDetDataset(data.Dataset):
         ind[k] = ct_int[1] * output_w + ct_int[0]
         reg[k] = ct - ct_int
         reg_mask[k] = 1
+        # print(f'==> wh[k]: {wh[k]}')
+        # print(f'==> cls_id: {cls_id}')
+        # print(f'==> cat_spec_wh[k]: {cat_spec_wh[k, cls_id * 2: cls_id * 2 + 2]} \n')
         cat_spec_wh[k, cls_id * 2: cls_id * 2 + 2] = wh[k]
         cat_spec_mask[k, cls_id * 2: cls_id * 2 + 2] = 1
         if self.opt.dense_wh:

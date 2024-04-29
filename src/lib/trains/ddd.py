@@ -45,6 +45,11 @@ class DddLoss(torch.nn.Module):
         dim_loss += self.crit_reg(output['dim'], batch['reg_mask'],
                                   batch['ind'], batch['dim']) / opt.num_stacks
       if opt.rot_weight > 0:
+        """
+        ==> Shape of output[rot]: torch.Size([8, 8, 96, 320])  # 8 batch size | 8 number of bins | 96, 320 heatmap resolution 
+        ==> Shape of batch['rotbin']: torch.Size([8, 50, 2])  # 8 batch size | 50 max obj_num | 2 number of rotbins
+        ==> Shape of batch['rotres']: torch.Size([8, 50, 2]) 
+        """
         rot_loss += self.crit_rot(output['rot'], batch['rot_mask'],
                                   batch['ind'], batch['rotbin'],
                                   batch['rotres']) / opt.num_stacks

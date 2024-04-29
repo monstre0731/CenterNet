@@ -177,8 +177,7 @@ class opts(object):
     
     # task
     # ctdet
-    self.parser.add_argument('--norm_wh', action='store_true',
-                             help='L1(\hat(y) / y, 1) or L1(\hat(y), y)')
+    self.parser.add_argument('--norm_wh', action='store_true', help='L1(hat(y) / y, 1) or L1(hat(y), y)')
     self.parser.add_argument('--dense_wh', action='store_true',
                              help='apply weighted regression near center or '
                                   'just apply regression on center point.')
@@ -269,7 +268,7 @@ class opts(object):
     print('training chunk_sizes:', opt.chunk_sizes)
 
     opt.root_dir = os.path.join(os.path.dirname(__file__), '..', '..')
-    opt.data_dir = os.path.join(opt.root_dir, 'data')
+    opt.data_dir = '/media/disk3/Data-qingwu/dataset/kitti_detection'
     opt.exp_dir = os.path.join(opt.root_dir, 'exp', opt.task)
     opt.save_dir = os.path.join(opt.exp_dir, opt.exp_id)
     opt.debug_dir = os.path.join(opt.save_dir, 'debug')
@@ -318,6 +317,12 @@ class opts(object):
                    'wh': 2 if not opt.cat_spec_wh else 2 * opt.num_classes}
       if opt.reg_offset:
         opt.heads.update({'reg': 2})
+    elif opt.task == 'ctdet_kitti':
+      # assert opt.dataset in ['pascal', 'coco']
+      opt.heads = {'hm': opt.num_classes,
+                   'wh': 2 if not opt.cat_spec_wh else 2 * opt.num_classes}
+      if opt.reg_offset:
+        opt.heads.update({'reg': 2})
     elif opt.task == 'multi_pose':
       # assert opt.dataset in ['coco_hp']
       opt.flip_idx = dataset.flip_idx
@@ -338,6 +343,9 @@ class opts(object):
       'ctdet': {'default_resolution': [512, 512], 'num_classes': 80, 
                 'mean': [0.408, 0.447, 0.470], 'std': [0.289, 0.274, 0.278],
                 'dataset': 'coco'},
+      'ctdet_kitti': {'default_resolution': [512, 512], 'num_classes': 3, 
+                'mean': [0.408, 0.447, 0.470], 'std': [0.289, 0.274, 0.278],
+                'dataset': 'kitti'},
       'exdet': {'default_resolution': [512, 512], 'num_classes': 80, 
                 'mean': [0.408, 0.447, 0.470], 'std': [0.289, 0.274, 0.278],
                 'dataset': 'coco'},
